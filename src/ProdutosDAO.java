@@ -42,8 +42,35 @@ public class ProdutosDAO {
         }
     }
 
-    public ArrayList<ProdutosDTO> listarProdutos() {
-        // Lógica de listagem para a próxima etapa
-        return listagem;
+public ArrayList<ProdutosDTO> listarProdutos() {
+    String sql = "SELECT * FROM produtos"; // Seleciona todos os produtos do banco
+    conn = new conectaDAO().connectDB(); // Abre a conexão
+
+    try {
+        prep = conn.prepareStatement(sql);
+        resultset = prep.executeQuery(); // Executa a consulta e guarda no resultset
+
+        // Enquanto houver linhas no banco de dados, ele cria um objeto e adiciona na lista
+        while (resultset.next()) {
+            ProdutosDTO produto = new ProdutosDTO();
+            
+            produto.setId(resultset.getInt("id"));         // Pega o id da coluna do banco
+            produto.setNome(resultset.getString("nome"));   // Pega o nome
+            produto.setValor(resultset.getInt("valor"));    // Pega o valor
+            produto.setStatus(resultset.getString("status")); // Pega o status
+            
+            listagem.add(produto); // Adiciona o objeto na lista
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao listar produtos: " + e.getMessage());
+    } finally {
+        try { 
+            conn.close(); // Sempre feche a conexão após o uso
+        } catch (Exception e) {
+            System.out.println("Erro ao fechar conexão: " + e.getMessage());
+        }
+    }
+    
+    return listagem; // Retorna a lista preenchida para a listagemVIEW
     }
 }
