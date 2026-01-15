@@ -99,4 +99,23 @@ public ArrayList<ProdutosDTO> listarProdutos() {
     }
     return listagem;
 }
+    public ProdutosDTO buscarProduto(int id) {
+    String sql = "SELECT * FROM produtos WHERE id = ?";
+    conn = new conectaDAO().connectDB();
+    try {
+        prep = conn.prepareStatement(sql);
+        prep.setInt(1, id);
+        resultset = prep.executeQuery();
+
+        if (resultset.next()) {
+            ProdutosDTO produto = new ProdutosDTO();
+            produto.setId(resultset.getInt("id"));
+            produto.setStatus(resultset.getString("status"));
+            return produto;
+        }
+    } catch (Exception e) {
+        System.out.println("Erro ao buscar produto: " + e.getMessage());
+    }
+    return null; // Retorna null se o ID não existir
+}
 }

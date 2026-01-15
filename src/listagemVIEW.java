@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -136,20 +137,35 @@ public class listagemVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-    // 1. Pega o ID do campo de texto
-    String id = id_produto_venda.getText();
+String idText = id_produto_venda.getText();
     
-    // 2. Instancia o DAO
+    // Validação básica: campo vazio
+    if (idText.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Por favor, digite um ID.");
+        return;
+    }
+
+    int id = Integer.parseInt(idText);
     ProdutosDAO produtosdao = new ProdutosDAO();
     
-    // 3. CHAMA O MÉTODO (Remova as barras // para ativar)
-    produtosdao.venderProduto(Integer.parseInt(id));
-    
-    // 4. Atualiza a tabela na tela para mostrar o novo status
-    listarProdutos();
-    
-    // 5. Opcional: Limpa o campo de texto após vender
-    id_produto_venda.setText("");
+    // 1. Busca o produto para validar
+    ProdutosDTO produto = produtosdao.buscarProduto(id);
+
+    // 2. Validação: ID não encontrado
+    if (produto == null) {
+        JOptionPane.showMessageDialog(null, "Erro: Produto com ID " + id + " não encontrado na listagem.");
+    } 
+    // 3. Validação: Produto já vendido
+    else if (produto.getStatus().equalsIgnoreCase("Vendido")) {
+        JOptionPane.showMessageDialog(null, "Erro: Este produto já consta como vendido.");
+    } 
+    // 4. Se passar nas validações, realiza a venda
+    else {
+        produtosdao.venderProduto(id);
+        JOptionPane.showMessageDialog(null, "Sucesso: Produto vendido!");
+        listarProdutos(); // Atualiza a tabela
+        id_produto_venda.setText("");
+    }
 
     }//GEN-LAST:event_btnVenderActionPerformed
 
