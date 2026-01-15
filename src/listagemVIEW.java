@@ -136,17 +136,26 @@ public class listagemVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        String id = id_produto_venda.getText();
-        
-        ProdutosDAO produtosdao = new ProdutosDAO();
-        
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+    // 1. Pega o ID do campo de texto
+    String id = id_produto_venda.getText();
+    
+    // 2. Instancia o DAO
+    ProdutosDAO produtosdao = new ProdutosDAO();
+    
+    // 3. CHAMA O MÉTODO (Remova as barras // para ativar)
+    produtosdao.venderProduto(Integer.parseInt(id));
+    
+    // 4. Atualiza a tabela na tela para mostrar o novo status
+    listarProdutos();
+    
+    // 5. Opcional: Limpa o campo de texto após vender
+    id_produto_venda.setText("");
+
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW(); 
-        //vendas.setVisible(true);
+       vendasVIEW vendas = new vendasVIEW(); 
+       vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
